@@ -1,0 +1,2082 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{helvet}
+\usepackage{float}
+% --- COLOR SETUP (Matching your screenshot style) ---
+\definecolor{codebg}{RGB}{248,249,250}
+\definecolor{codeborder}{RGB}{180,180,180}
+\definecolor{rcomment}{RGB}{34,139,34}
+\definecolor{rkeyword}{RGB}{0,0,255}
+\definecolor{rstring}{RGB}{163,21,21}
+\definecolor{pykeyword}{RGB}{0,0,255}
+\definecolor{pycomment}{RGB}{34,139,34}
+\definecolor{pystring}{RGB}{163,21,21}
+
+% --- R LISTINGS CONFIG ---
+\lstdefinestyle{Rstyle}{
+    language=R,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    keywordstyle=\color{rkeyword}\bfseries,
+    commentstyle=\color{rcomment},
+    stringstyle=\color{rstring},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    columns=flexible
+}
+
+% --- PYTHON LISTINGS CONFIG ---
+\lstdefinestyle{Pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    keywordstyle=\color{pykeyword}\bfseries,
+    commentstyle=\color{pycomment},
+    stringstyle=\color{pystring},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    columns=flexible
+}
+
+% --- CUSTOM BOX FOR CODE & OUTPUT ---
+\newtcolorbox{codebox}{
+    colback=codebg,
+    colframe=codeborder,
+    arc=0mm,
+    boxrule=0.5pt,
+    left=5pt,
+    right=5pt,
+    top=5pt,
+    bottom=5pt
+}
+
+\begin{document}
+
+% --- TITLE SECTION (No colons, direct info) ---
+\begin{center}
+    {\huge \bfseries \sffamily AIRLINE DATA ANALYSIS ASSIGNMENT} \\[1.5em]
+    {\large Samia Siddike} \\
+    {\large Student ID-12310039} \\
+    {\large STAT-2205(Programming with R and Python)} \\
+    {\large \today} \\
+    \vspace{2em}
+    \strut\hrule
+    \vspace{1.5em}
+\end{center}
+
+% ==========================================
+% INITIAL SETUP (Onetime execution)
+% ==========================================
+\noindent {\large \bfseries Read Dataset and Random Sampling}
+\vspace{0.5em}
+\noindent \textbf{R Code}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#read data
+library(readxl)
+airline<-read.csv("flight_data.csv",1)
+airline
+
+#random Sampling using student ID
+set.seed(12339)
+#random sampling
+install.packages("dplyr")
+library(dplyr)
+airline_rs<-sample_n(airline,12339)
+airline_rs
+\end{lstlisting}
+\end{codebox}
+\vspace{1em}
+\noindent \textbf{Python Code}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#read csv data
+import pandas as pd
+flight=pd.read_csv('flight_data.csv')
+flight.head()
+
+## Select random sample
+airline_rs = flight.sample(n=12339, random_state=12339)
+print(airline_rs)
+\end{lstlisting}
+\end{codebox}
+\vspace{2em}
+\strut\hrule
+\vspace{2em}
+
+% ==========================================
+% QUESTION 1 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 1:
+What do coach ticket prices look like? What are the high and low values? What would be considered the average? Does \$500 seem like a good price for a coach ticket?}
+
+\vspace{1em}
+\newpage
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#What do coach ticket price look like ?
+library(ggplot2)
+ggplot(airline_rs, aes(x = coach_price)) +
+  geom_histogram(fill = "skyblue", bins = 30) +
+  ggtitle("Distribution of Coach Ticket Prices")
+
+#high and low values, averege
+max(airline_rs$coach_price)
+min(airline_rs$coach_price)
+mean(airline_rs$coach_price)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> max(airline_rs$coach_price)
+[1] 566.175
+> min(airline_rs$coach_price)
+[1] 99.315
+> mean(airline_rs$coach_price)
+[1] 376.1465
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+##What do coach ticket price look like ?
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.set_style("whitegrid")
+plt.figure(figsize=(8,5))
+
+sns.histplot(
+    data=airline_rs,
+    x="coach_price",
+    bins=30,
+    color="steelblue",
+    edgecolor="black")
+plt.show()
+
+#high and low values,average
+print("Max:", airline_rs["coach_price"].max())
+print("Min:", airline_rs["coach_price"].min())
+print("Mean:", airline_rs["coach_price"].mean())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+Max: 588.335
+Min: 94.535
+Mean: 376.1661650052679
+
+\end{verbatim}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Histogram-Question 1.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+High, Low, and Average Values: Based on the descriptive statistics extracted from the dataset, the coach ticket prices range from a minimum value of \$94.535 to a maximum value of \$588.335. The overall average (mean) ticket price is calculated to be \$376.167, which aligns perfectly with the highest concentration of frequencies observed in the center of the histogram.
+
+Assessment of the \$500 Ticket Price: A price of \$500 does not seem to be a good or economical choice for a standard coach ticket. As illustrated by the histogram, the vast majority of the data points are clustered between \$300 and \$450. A ticket priced at \$500 sits significantly above the average price of \&376.167 and lies on the upper tail of the distribution, approaching the absolute maximum recorded price of \$588.335. Therefore, \$500 represents a highly expensive and premium-end fare rather than a reasonable or standard price for a coach ticket.
+\vspace{2.5em}
+
+
+% ==========================================
+% QUESTION 2 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 2:
+What are the high low and average prices for 8\_hour long flight? Does a \$500 ticket seem more reasonable than before}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#What are the prices for 8-hour flights?
+flight_8hr<-subset(airline_rs,hours==8)
+max(flight_8hr$coach_price)
+min(flight_8hr$coach_price)
+mean(flight_8hr$coach_price)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> max(flight_8hr$coach_price)
+[1] 548.845
+> min(flight_8hr$coach_price)
+[1] 215.245
+> mean(flight_8hr$coach_price)
+[1] 432.7682
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#What are the prices for 8-hour flights?
+flight_8hr = airline_rs[airline_rs["hours"] == 8]
+max_price = flight_8hr["coach_price"].max()
+min_price = flight_8hr["coach_price"].min()
+mean_price = flight_8hr["coach_price"].mean()
+
+print("Max Coach Price (8-hour flight):", max_price)
+print("Min Coach Price (8-hour flight):", min_price)
+print("Average Coach Price (8-hour flight):", mean_price)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+Max Coach Price (8-hour flight): 589.985
+Min Coach Price (8-hour flight): 275.39
+Average Coach Price (8-hour flight): 437.31280155642025
+\end{verbatim}
+\vspace{0.5em}
+
+\noindent \textbf{Interpretation :} \\
+Based on the filtered descriptive statistics for 8\-hour-long flights, the coach ticket prices exhibit a minimum value of \$275.39 and a maximum value of \$589.985. The average ticket price for this specific flight duration is calculated to be approximately \$437.31. 
+
+In this context, a ticket price of \$500 appears significantly more reasonable than before. For the overall dataset, \$500 was an extreme outlier approaching the absolute maximum price. However, for a long-haul 8-hour flight, the average cost shifts upward significantly (\$437.31). Therefore, a \$500 fare sits much closer to the true mean of this sub-distribution, representing a completely realistic and justifiable option for consumers rather than an overpriced premium.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 3 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 3:
+How are flight delay time distributed? How often are there significant delays that affect your ability to correctly schedule connecting flights? What kinds of delays are typical}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+class(airline_rs$delay)
+library(ggplot2)
+ggplot(airline_rs, aes(x = delay)) +
+  geom_histogram(fill = "orange", bins = 30) +
+  ggtitle("Distribution of Flight Delays")
+
+summary(airline$delay)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> median(airline$delay)
+[1] 10
+\end{verbatim}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.set_style("whitegrid")
+plt.figure(figsize=(8,5))
+
+sns.histplot(
+    data=airline_rs,
+    x="delay",
+    bins=30,
+    color="steelblue",
+    edgecolor="black")
+
+plt.title("Distribution of Flight Delay")
+plt.xlabel("Delay Time")
+plt.ylabel("Frequency")
+plt.show()
+
+#summary
+airline_rs["delay"].describe()
+
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+count    12339.000000
+mean        14.110382
+std         55.564262
+min          0.000000
+25%          9.000000
+50%         10.000000
+75%         13.000000
+max       1522.000000
+\end{verbatim}
+\vspace{0.5em}
+
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Histogram-Question 3.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+~ Distribution of Flight Delay Times
+Shape: The distribution is highly right-skewed (positively skewed).
+
+Evidence: The median is 10 minutes and the 75th percentile is 13 minutes, showing most data is clustered near zero. However, the mean (14.11 min) is greater than the median, and the standard deviation is very high (55.56 min) due to extreme outliers.
+
+~ Frequency of Significant Delays
+Frequency: Significant delays are very rare.
+
+Evidence: Since 75% of the flights have a delay of 13 minutes or less, well over 75% of flights are safe for connecting schedules. The risk is limited to rare extreme cases (as seen from the maximum delay of 1,522 minutes).
+
+~ Typical Delays
+Typical: Routine, minor operational delays ranging between 9 to 13 minutes (IQR).
+
+Atypical: Rare, catastrophic delays stretching up to several hours (Maximum 1,522 minutes), likely caused by severe weather or mechanical failures.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 4 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 4: 
+How does the coach price correlate withflight distance, number of passengers,delay and flight duration?}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+correlation <- cor(airline_rs[,c('coach_price','miles','passengers',
+                              'delay','hours')])["coach_price",]
+print(correlation)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> print(correlation)
+coach_price       miles  passengers       delay 
+ 1.00000000  0.35641339  0.15234118  0.01107994 
+      hours 
+ 0.35079839
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+import pandas as pd
+
+correlation = airline_rs[['coach_price',
+                          'miles',
+                          'passengers',
+                          'delay',
+                          'hours']].corr()['coach_price']
+
+print(correlation)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+coach_price    1.000000
+miles          0.359655
+passengers     0.166628
+delay         -0.005054
+hours          0.353370
+Name: coach_price, dtype: float64
+\end{verbatim}
+\vspace{0.5em}
+
+\noindent \textbf{Interpretation :} \\
+ The correlation matrix reveals that coach\_price is primarily driven by the physical scale of the journey rather than day-of operational factors. The two strongest predictors are flight distance (miles) and flight duration (hours), both showing a moderate positive relationship with ticket costs. This indicates a direct link between airline operational expenses—such as fuel consumption and crew hours—and the final ticket price. Because distance and time are naturally collinear, they mirror each other's impact on pricing.
+
+ On the demand side, the number of passengers shows only a weak positive relationship with ticket prices. While this subtle connection captures the essence of dynamic pricing, where fuller flights can lead to higher seat prices, its low value suggests that capacity alone does not heavily dictate the baseline fare. Meanwhile, flight delays show absolutely no linear relationship with coach price, hovering at virtually zero. This confirms that ticket pricing is an ex-ante variable, determined by scheduling and market demand long before the actual day of travel, making unpredictable operational disruptions completely irrelevant to how a ticket is priced.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 5 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 5:
+What is the relationship between coach price and first\_class prices? Do flights with higher prices always have higher first\_class prices as well}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#relationship between coach and first_class prices
+#scatter plot
+library(ggplot2)
+ggplot(airline_rs, aes(x = coach_price, y = firstclass_price)) +
+  geom_point(color = "blue") +
+  ggtitle("Coach Price vs First-Class Price")
+
+cor(airline$coach_price, airline$firstclass_price)
+model<-lm(firstclass_price~coach_price,data=airline_rs)
+print(model)
+summary(model)
+
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> cor(airline$coach_price, airline$firstclass_price)
+[1] 0.7587566
+> model<-lm(firstclass_price~coach_price,data=airline_rs)
+Coefficients:
+(Intercept)  coach_price  
+     761.20         1.84  
+> summary(model)
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-352.64  -73.42    4.92   74.24  384.87 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 761.19596    5.41312   140.6   <2e-16 ***
+coach_price   1.84025    0.01417   129.9   <2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 106 on 12337 degrees of freedom
+Multiple R-squared:  0.5777,	Adjusted R-squared:  0.5777 
+F-statistic: 1.688e+04 on 1 and 12337 DF,  p-value: < 2.2e-16
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#scatter plot
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.figure(figsize=(7,5))
+
+sns.scatterplot(
+    data=airline_rs,
+    x="coach_price",
+    y="firstclass_price",
+    color="blue")
+plt.title("Coach Price vs FirstClass Price")
+plt.show()
+
+#correlation
+airline_rs[["coach_price", "firstclass_price"]].corr()
+
+#linear regression model
+import statsmodels.api as sm
+X = airline_rs[["coach_price"]]
+y = airline_rs["firstclass_price"]
+X = sm.add_constant(X)  # intercept add
+model = sm.OLS(y, X).fit()
+print(model.summary())
+
+#summary
+import statsmodels.api as sm
+X = airline_rs[["coach_price"]]
+y = airline_rs["firstclass_price"]
+X = sm.add_constant(X)
+
+model = sm.OLS(y, X).fit()
+print(model.summary())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:       firstclass_price   R-squared:                       0.573
+Model:                            OLS   Adj. R-squared:                  0.573
+Method:                 Least Squares   F-statistic:                 1.658e+04
+Date:                Sat, 16 May 2026   Prob (F-statistic):               0.00
+Time:                        13:20:55   Log-Likelihood:                -75097.
+No. Observations:               12339   AIC:                         1.502e+05
+Df Residuals:                   12337   BIC:                         1.502e+05
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+===============================================================================
+                  coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const         772.9401      5.399    143.151      0.000     762.356     783.524
+coach_price     1.8116      0.014    128.749      0.000       1.784       1.839
+==============================================================================
+Omnibus:                      104.115   Durbin-Watson:                   2.009
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               89.908
+Skew:                          -0.154   Prob(JB):                     3.00e-20
+Kurtosis:                       2.717   Cond. No.                     2.16e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is
+correctly specified.
+[2] The condition number is large, 2.16e+03. This might indicate that 
+there are strong multicollinearity or other numerical problems.
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:       firstclass_price   R-squared:                       0.573
+Model:                            OLS   Adj. R-squared:                  0.573
+Method:                 Least Squares   F-statistic:                 1.658e+04
+Date:                Sat, 16 May 2026   Prob (F-statistic):               0.00
+Time:                        13:20:55   Log-Likelihood:                -75097.
+No. Observations:               12339   AIC:                         1.502e+05
+Df Residuals:                   12337   BIC:                         1.502e+05
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+===============================================================================
+                  coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const         772.9401      5.399    143.151      0.000     762.356     783.524
+coach_price     1.8116      0.014    128.749      0.000       1.784       1.839
+==============================================================================
+Omnibus:                      104.115   Durbin-Watson:                   2.009
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               89.908
+Skew:                          -0.154   Prob(JB):                     3.00e-20
+Kurtosis:                       2.717   Cond. No.                     2.16e+03
+==============================================================================
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is
+correctly specified.
+[2] The condition number is large, 2.16e+03. This might indicate that 
+there are strong multicollinearity or other numerical problems.
+
+\end{verbatim}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Histogram-Question 5.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+Strong Positive Association: Overall, there is a strong, positive linear relationship between coach\_price and firstclass\_price. Generally, as the economy/coach ticket price increases, the first-class ticket price also rises.Predictive Power: The OLS model shows an $R^2 = 0.573$, meaning that $57.3\%$ of the variation in first-class prices is explained by the variations in coach prices.Variability (Not Deterministic): However, this relationship is not absolute. The noticeable vertical spread of data points in the scatter plot at any given coach price proves that airlines use dynamic pricing, meaning a higher coach price does not always guarantee a higher first-class price.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 6 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 6:
+What is the relationship between coach prices and in\_flight features: in\_flight meal, in\_flight wifi, and in\_flight entertainment? Which features are associated with the highest increase in price?}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+Coach_price_lm=lm(coach_price ~ inflight_meal+inflight_entertainment
+                 +inflight_wifi, data=airline_rs)
+print(Coach_price_lm)
+summary(Coach_price_lm)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+Coefficients:
+              (Intercept)           inflight_mealYes  
+                   251.74                      20.36  
+inflight_entertainmentYes           inflight_wifiYes  
+                    69.66                      69.37
+> Residuals:
+     Min       1Q   Median       3Q      Max 
+-206.325  -41.888    4.754   42.415  175.410 
+
+Coefficients:
+                          Estimate Std. Error t value
+(Intercept)                251.735      1.968  127.92
+inflight_mealYes            20.360      1.126   18.07
+inflight_entertainmentYes   69.656      1.291   53.94
+inflight_wifiYes            69.374      1.721   40.31
+                          Pr(>|t|)    
+(Intercept)                 <2e-16 ***
+inflight_mealYes            <2e-16 ***
+inflight_entertainmentYes   <2e-16 ***
+inflight_wifiYes            <2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 57.12 on 12335 degrees of freedom
+Multiple R-squared:  0.2819,	Adjusted R-squared:  0.2817 
+F-statistic:  1614 on 3 and 12335 DF,  p-value: < 2.2e-16
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+import statsmodels.api as sm
+# Convert categorical
+for col in ["inflight_meal", "inflight_entertainment", "inflight_wifi"]:
+    airline_rs[col] = airline_rs[col].astype("category").cat.codes
+    
+# 2. Define X and y
+X = airline_rs[
+    ["inflight_meal",
+     "inflight_entertainment",
+     "inflight_wifi"]]
+y = airline_rs["coach_price"]
+
+# 3. Add constant (intercept)
+X = sm.add_constant(X)
+
+# 4. Fit multiple linear regression
+model = sm.OLS(y, X).fit()
+
+# 5. Output (like R summary)
+print(model.summary())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:            coach_price   R-squared:                       0.290
+Model:                            OLS   Adj. R-squared:                  0.290
+Method:                 Least Squares   F-statistic:                     1680.
+Date:                Sat, 16 May 2026   Prob (F-statistic):               0.00
+Time:                        13:33:05   Log-Likelihood:                -67474.
+No. Observations:               12339   AIC:                         1.350e+05
+Df Residuals:                   12335   BIC:                         1.350e+05
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==========================================================================================
+                             coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------
+const                    250.0462      1.992    125.510      0.000     246.141     253.951
+inflight_meal             19.8486      1.126     17.634      0.000      17.642      22.055
+inflight_entertainment    71.4983      1.294     55.265      0.000      68.962      74.034
+inflight_wifi             71.0823      1.765     40.281      0.000      67.623      74.541
+==============================================================================
+Omnibus:                      178.791   Durbin-Watson:                   2.011
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              170.086
+Skew:                          -0.254   Prob(JB):                     1.17e-37
+Kurtosis:                       2.730   Cond. No.                         8.06
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+\end{verbatim}
+\vspace{0.5em}
+
+\noindent \textbf{Interpretation :} \\
+The OLS regression analysis demonstrates a statistically significant relationship between coach ticket prices and the presence of amenities, with the overall model explaining 29% of the variance in coach prices (R 
+2
+ =0.290,F=1680,p<0.001). All three in-flight features are highly significant predictors (p<0.001), indicating that the inclusion of any of these amenities is reliably associated with a higher ticket fare. The baseline coach price for a flight lacking all three features is estimated at $250.05.
+Among the features evaluated, the inclusion of in-flight entertainment is associated with the highest premium, increasing the average ticket price by $71.50 when other factors are held constant. In-flight Wi-Fi commands a nearly identical premium, driving up the average price by $71.08. Conversely, the addition of an in-flight meal yields the smallest impact, adding an average of just $19.85 to the ticket cost. Ultimately, premium connectivity and entertainment features are the dominant drivers of higher coach fares within this set of operational variables.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 7 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 7: 
+How does the number of passengers change in relation to the length of flights?}
+
+\vspace{1em}
+\newpage
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#linear regression
+cor(airline_rs$hours,airline_rs$passengers)
+model_passenger<-lm(hours~passengers,data=airline_rs)
+summary(model_passenger)
+#visualization-scatter plot
+plot(airline$hours,airline$passengers,
+     main="Flight hours Vs passenger",
+     xlab="Flight duration (Hours)",
+     ylab="Number of passengers",
+     col=4, las=1)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> cor(airline_rs$hours,airline_rs$passengers)
+[1] 0.008250699
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.6623 -1.6132  0.3558  0.4268  4.4347 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 3.397150   0.256362  13.251   <2e-16 ***
+passengers  0.001128   0.001231   0.916    0.359    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.739 on 12337 degrees of freedom
+Multiple R-squared:  6.807e-05,	Adjusted R-squared:  -1.298e-05 
+F-statistic: 0.8399 on 1 and 12337 DF,  p-value: 0.3594
+\end{verbatim}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+import statsmodels.api as sm
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Correlation
+corr_value = airline_rs["hours"].corr(airline_rs["passengers"])
+print("Correlation (hours vs passengers):", corr_value)
+
+# Linear Regression
+X = airline_rs[["passengers"]]
+y = airline_rs["hours"]
+X = sm.add_constant(X)
+model_passenger = sm.OLS(y, X).fit()
+print(model_passenger.summary())
+
+# Scatter Plot
+plt.figure(figsize=(7,5))
+sns.scatterplot(
+    data=airline_rs,
+    x="hours",
+    y="passengers",
+    color="blue")
+
+plt.title("Flight Hours vs Passenger")
+plt.xlabel("Flight duration (Hours)")
+plt.ylabel("Number of passengers")
+plt.savefig("Scatterplot-Question 5",dpi=300,bbox_inches="tight")
+plt.show()
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+Correlation (hours vs passengers): -0.0022597082522336017
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  hours   R-squared:                       0.000
+Model:                            OLS   Adj. R-squared:                 -0.000
+Method:                 Least Squares   F-statistic:                   0.06300
+Date:                Mon, 18 May 2026   Prob (F-statistic):              0.802
+Time:                        19:54:28   Log-Likelihood:                -24342.
+No. Observations:               12339   AIC:                         4.869e+04
+Df Residuals:                   12337   BIC:                         4.870e+04
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          3.6979      0.258     14.307      0.000       3.191       4.204
+passengers    -0.0003      0.001     -0.251      0.802      -0.003       0.002
+==============================================================================
+Omnibus:                      377.251   Durbin-Watson:                   1.998
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              406.913
+Skew:                           0.437   Prob(JB):                     4.36e-89
+Kurtosis:                       2.834   Cond. No.                     3.43e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is
+correctly specified.
+[2] The condition number is large, 3.43e+03. This might indicate that 
+there are strong multicollinearity or other numerical problems.
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{sscatterplot question 7.png}
+\end{figure}
+\noindent \textbf{Interpretation :} \\
+~Nature of the Relationship
+No Linear Relationship: There is absolutely no linear relationship between the length of a flight (flight duration in hours) and the number of passengers it carries.
+
+Evidence from Output: * Correlation Coefficient: The correlation between hours and passengers is virtually zero (−0.0023), proving no meaningful linear association exists.
+
+R-squared value: The R 
+2
+  is 0.000, meaning 0\% of the variation in the flight duration is explained by the number of passengers.
+
+P-value: The p-value for the passengers variable is 0.802 (P>0.05), which shows that the relationship is statistically highly insignificant.
+
+~Visual Analysis from the Scatter Plot
+The scatter plot displays completely parallel vertical bands of data points across different flight hours (from 1 to 8 hours).
+
+Regardless of whether a flight lasts 1 hour or 8 hours, the number of passengers consistently ranges between roughly 140 and 240. This means flight length has no bearing on how full or empty the aircraft is.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 8 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 8:
+What is the relationship between coach and first\_class prices on weekends compare to weekdays?}
+
+\vspace{1em}
+\newpage
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+weekend_data<-airline_rs[airline_rs$weekend==1,]
+weekday_data<-airline_rs[airline_rs$weekend==0,]
+print(weekday_data)
+print(weekend_data)
+library(ggplot2)
+ggplot(airline_rs, aes(x = coach_price,
+                       y = firstclass_price,
+                       colour = factor(weekend))) +
+                       geom_point() +
+  ggtitle("weekend vs weekday:Coach Price vs First-Class Price")
+
+#regression
+model1<-lm(firstclass_price~coach_price*weekend,data=airline_rs)
+summary(model1)
+model2<-lm(firstclass_price~coach_price*day_of_week,data=airline_rs)
+summary(model2)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> summary(model1)
+Call:
+lm(formula = firstclass_price ~ coach_price * weekend, data = airline_rs)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-229.39  -41.45   -1.35   40.42  233.33 
+
+Coefficients:
+                        Estimate Std. Error t value
+(Intercept)            967.48539    5.60362  172.65
+coach_price              0.90393    0.01718   52.62
+weekendYes             236.03084    7.57409   31.16
+coach_price:weekendYes  -0.02717    0.02122   -1.28
+                       Pr(>|t|)    
+(Intercept)              <2e-16 ***
+coach_price              <2e-16 ***
+weekendYes               <2e-16 ***
+coach_price:weekendYes      0.2    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 60.68 on 12335 degrees of freedom
+Multiple R-squared:  0.8617,	Adjusted R-squared:  0.8617 
+F-statistic: 2.563e+04 on 3 and 12335 DF,  p-value: < 2.2e-16
+
+> summary(model2)
+Call:
+lm(formula = firstclass_price ~ coach_price * day_of_week, data = airline_rs)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-224.585  -41.322   -1.209   40.272  233.464 
+
+Coefficients:
+                                   Estimate Std. Error
+(Intercept)                       1.213e+03  9.815e+00
+coach_price                       8.571e-01  2.415e-02
+day_of_weekMonday                -2.604e+02  1.398e+01
+day_of_weekSaturday              -1.979e+01  1.281e+01
+day_of_weekSunday                -1.225e+01  1.311e+01
+day_of_weekThursday              -2.315e+02  1.601e+01
+day_of_weekTuesday               -2.404e+02  1.482e+01
+day_of_weekWednesday             -2.444e+02  1.519e+01
+coach_price:day_of_weekMonday     8.602e-02  3.898e-02
+coach_price:day_of_weekSaturday   3.354e-02  3.127e-02
+coach_price:day_of_weekSunday     3.458e-02  3.230e-02
+coach_price:day_of_weekThursday  -1.044e-03  4.557e-02
+coach_price:day_of_weekTuesday    3.795e-02  4.182e-02
+coach_price:day_of_weekWednesday  4.453e-02  4.287e-02
+                                 t value Pr(>|t|)    
+(Intercept)                      123.620   <2e-16 ***
+coach_price                       35.484   <2e-16 ***
+day_of_weekMonday                -18.629   <2e-16 ***
+day_of_weekSaturday               -1.545   0.1224    
+day_of_weekSunday                 -0.934   0.3503    
+day_of_weekThursday              -14.461   <2e-16 ***
+day_of_weekTuesday               -16.225   <2e-16 ***
+day_of_weekWednesday             -16.090   <2e-16 ***
+coach_price:day_of_weekMonday      2.207   0.0273 *  
+coach_price:day_of_weekSaturday    1.073   0.2834    
+coach_price:day_of_weekSunday      1.071   0.2843    
+coach_price:day_of_weekThursday   -0.023   0.9817    
+coach_price:day_of_weekTuesday     0.907   0.3642    
+coach_price:day_of_weekWednesday   1.039   0.2989    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 60.62 on 12325 degrees of freedom
+Multiple R-squared:  0.8621,	Adjusted R-squared:  0.862 
+F-statistic:  5929 on 13 and 12325 DF,  p-value: < 2.2e-16
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{lstlisting}[style=Pythonstyle]
+import statsmodels.api as sm
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Weekend & Weekday split
+weekend_data = airline_rs[airline_rs["weekend"] == 1]
+weekday_data = airline_rs[airline_rs["weekend"] == 0]
+
+print("Weekday Data:")
+print(weekday_data.head())
+print("Weekend Data:")
+print(weekend_data.head())
+
+#Scatter plot (weekend vs weekday)
+plt.figure(figsize=(7,5))
+sns.scatterplot(
+    data=airline_rs,
+    x="coach_price",
+    y="firstclass_price",
+    hue="weekend")
+plt.title("Weekend vs Weekday: Coach Price vs First-Class Price")
+plt.show()
+
+import statsmodels.api as sm
+df = airline_rs.copy()
+# FORCE CLEAN numeric conversion
+df["coach_price"] = pd.to_numeric(df["coach_price"], errors="coerce")
+df["weekend"] = df["weekend"].astype(str).str.strip()
+df["weekend"] = df["weekend"].map({"Yes": 1, "No": 0})
+df["day_of_week"] = df["day_of_week"].astype("category").cat.codes
+# drop bad rows
+df = df.dropna(subset=["coach_price", "weekend", "day_of_week"])
+
+# MODEL 1
+X1 = sm.add_constant(df[["weekend"]])
+y1 = df["coach_price"]
+model1 = sm.OLS(y1, X1).fit()
+print(model1.summary())
+
+# MODEL 2
+X2 = sm.add_constant(df[["day_of_week"]])
+y2 = df["coach_price"]
+model2 = sm.OLS(y2, X2).fit()
+print(model2.summary())
+\end{lstlisting}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+                           OLS Regression Results                            
+==============================================================================
+Dep. Variable:            coach_price   R-squared:                       0.343
+Model:                            OLS   Adj. R-squared:                  0.343
+Method:                 Least Squares   F-statistic:                     6444.
+Date:                Sat, 16 May 2026   Prob (F-statistic):               0.00
+Time:                        14:28:43   Log-Likelihood:                -66995.
+No. Observations:               12339   AIC:                         1.340e+05
+Df Residuals:                   12337   BIC:                         1.340e+05
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        322.3456      0.849    379.515      0.000     320.681     324.010
+weekend       84.0618      1.047     80.277      0.000      82.009      86.114
+==============================================================================
+Omnibus:                      373.247   Durbin-Watson:                   2.004
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              410.068
+Skew:                          -0.426   Prob(JB):                     9.01e-90
+Kurtosis:                       3.267   Cond. No.                         3.18
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:            coach_price   R-squared:                       0.090
+Model:                            OLS   Adj. R-squared:                  0.090
+Method:                 Least Squares   F-statistic:                     1224.
+Date:                Sat, 16 May 2026   Prob (F-statistic):          8.58e-256
+Time:                        14:28:43   Log-Likelihood:                -69004.
+No. Observations:               12339   AIC:                         1.380e+05
+Df Residuals:                   12337   BIC:                         1.380e+05
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+===============================================================================
+                  coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const         406.2362      1.005    404.365      0.000     404.267     408.205
+day_of_week   -11.4778      0.328    -34.988      0.000     -12.121     -10.835
+==============================================================================
+Omnibus:                      301.571   Durbin-Watson:                   1.994
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              323.626
+Skew:                          -0.390   Prob(JB):                     5.32e-71
+Kurtosis:                       3.146   Cond. No.                         5.65
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Scatter plot-Question 8.png}
+\end{figure}
+\noindent \textbf{Interpretation :} \\
+The positive relationship between coach and first-class prices remains strong across all days. However, weekend flights are significantly more expensive overall. For the exact same economy/coach fare class, an individual will pay a substantially higher price for a first-class ticket if the flight departs on a weekend versus a weekday.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 9 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 9: 
+How do coach prices differ for redeyes and non\_redeyes on each day of week ?}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+library(ggplot2)
+ggplot(airline_rs,aes(x=day_of_week,
+                      y=coach_price,
+                      fill=factor(redeye)))+geom_boxplot()+
+  ggtitle("Redeye vs non-redeye:coach price by day of week")
+#mean comparision
+aggregate(coach_price~day_of_week+redeye,
+          data=airline_rs,mean)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+> day_of_week redeye coach_price
+1       Friday     No    406.6768
+2       Monday     No    324.1113
+3     Saturday     No    414.4095
+4       Sunday     No    404.7448
+5     Thursday     No    325.2745
+6      Tuesday     No    323.0529
+7    Wednesday     No    324.9927
+8       Friday    Yes    335.1988
+9       Monday    Yes    255.5563
+10    Saturday    Yes    345.4936
+11      Sunday    Yes    342.2701
+12    Thursday    Yes    261.5826
+13     Tuesday    Yes    274.3381
+14   Wednesday    Yes    265.4637
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+# COPY DATA (safe)
+df = airline_rs.copy()
+# Ensure correct types
+df["coach_price"] = pd.to_numeric(df["coach_price"], errors="coerce")
+df["day_of_week"] = df["day_of_week"].astype(str)
+df["redeye"] = df["redeye"].astype(str)
+
+# BOXPLOT (R ggplot equivalent)
+plt.figure(figsize=(8,5))
+
+sns.boxplot(
+    data=df,
+    x="day_of_week",
+    y="coach_price",
+    hue="redeye")
+plt.title("Redeye vs Non-Redeye: Coach Price by Day of Week")
+plt.show()
+
+# MEAN COMPARISON (R aggregate equivalent)
+mean_table = df.groupby(["day_of_week", "redeye"])["coach_price"].mean()
+
+print("\nMean Comparison (coach_price ~ day_of_week + redeye):")
+print(mean_table)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+\begin{verbatim}
+Mean Comparison (coach_price ~ day_of_week + redeye):
+day_of_week  redeye
+Friday       No        404.743029
+             Yes       335.290937
+Monday       No        325.226217
+             Yes       252.036197
+Saturday     No        415.860879
+             Yes       344.242469
+Sunday       No        406.735239
+             Yes       334.501985
+Thursday     No        323.765325
+             Yes       275.668654
+Tuesday      No        327.316265
+             Yes       271.849621
+Wednesday    No        325.422455
+             Yes       254.938298
+Name: coach_price, dtype: float64
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Box plot-Question 9.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+Redeye flights consistently maintain a lower average coach price compared to non-redeye flights across every single day of the week, allowing travelers to save roughly $50 to $73 depending on the day. Additionally, flight prices are highly dependent on the day of the week, with a noticeable price spike occurring over the weekend (Friday, Saturday, and Sunday) for both flight categories. During weekdays (Monday through Thursday), non-redeye prices remain very stable at around $323 to $327, while weekday redeye flights drop to their lowest rates on Mondays and Wednesdays at around $252 to $255. Overall, the absolute most expensive option is a Saturday non-redeye flight, which averages around $416, whereas the most budget-friendly option is a Monday redeye flight, averaging just $252.
+\vspace{2.5em}
+
+% ==========================================
+% QUESTION 10 (Template block)
+% ==========================================
+\noindent \textbf{\large Question 10: Perform the analysis for appropriate variables:}
+
+\begin{itemize}
+    \item Summary statistics (mean, median, standard deviation)
+    \item Visualization using histograms, boxplots, and bar charts
+    \item Hypothesis Testing (t, z and Chi-square)
+    \item Independent t-tests to compare group means
+    \item Price differences between weekend and weekday flights
+    \item Correlation analysis among numeric variables
+    \item Regression Analysis
+    \item Linear regression to predict ticket prices
+\end{itemize}
+
+\vspace{1em}
+\noindent \textbf{solution :}\\
+\noindent\textbf{R code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#summary statistics
+numeric_vars <- airline_rs[, c(
+  "miles",
+  "passengers",
+  "delay",
+  "coach_price",
+  "firstclass_price",
+  "hours")]
+
+sapply(numeric_vars, mean, na.rm = TRUE)
+
+sapply(numeric_vars, median, na.rm = TRUE)
+
+sapply(numeric_vars, sd, na.rm = TRUE)
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+
+
+
+\begin{verbatim}
+> sapply(numeric\_vars, mean, na.rm = TRUE)
+           miles       passengers            delay 
+     2006.470216       207.846179        13.337061 
+     coach\_price firstclass\_price            hours 
+      376.146540      1453.399962         3.631656 
+> sapply(numeric\_vars, median, na.rm = TRUE)
+           miles       passengers            delay 
+         1986.00           210.00            10.00 
+     coach\_price firstclass\_price            hours 
+          379.35          1501.30             4.00 
+> sapply(numeric\_vars, sd, na.rm = TRUE)
+           miles       passengers            delay 
+      942.699231        12.718768        46.871765 
+     coach\_price firstclass\_price            hours 
+       67.393273       163.170553         1.739263
+
+\end{verbatim}
+
+
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{lstlisting}[style=Pythonstyle]
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from scipy import stats
+df = airline_rs.copy()
+# 1. SUMMARY STATISTICS
+num_cols = ["miles","passengers","delay","coach_price","firstclass_price","hours"]
+
+for col in num_cols:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+print("\nMEAN:\n", df[num_cols].mean())
+print("\nMEDIAN:\n", df[num_cols].median())
+print("\nSTD:\n", df[num_cols].std())
+\end{lstlisting}
+
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+MEAN:
+ miles               2001.672988
+passengers           207.690656
+delay                 13.465030
+coach_price          377.651018
+firstclass_price    1457.088301
+hours                  3.620472
+dtype: float64
+
+MEDIAN:
+ miles               1974.00
+passengers           209.00
+delay                 10.00
+coach_price          382.62
+firstclass_price    1505.78
+hours                  4.00
+dtype: float64
+
+STD:
+ miles               951.205021
+passengers           12.726152
+delay                46.838319
+coach_price          68.083457
+firstclass_price    162.894352
+hours                 1.751216
+dtype: float64
+\end{verbatim}
+
+
+\vspace{0.5em}
+
+\noindent \textbf{Interpretation :} \\
+The data shows that the average flight covers $2001.67$ miles (median: $1974.00$ miles) and lasts $3.62$ hours (median: $4.00$ hours), with standard deviations of $951.21$ miles and $1.75$ hours indicating a balanced mix of short and long-haul flights. Passenger capacity is highly uniform, averaging $207.69$ passengers per flight with a very low standard deviation of $12.73$. In contrast, flight operational delays are highly volatile and right-skewed; the average delay is $13.47$ minutes, but the median is lower at $10.00$ minutes, and a large standard deviation of $46.84$ minutes highlights the presence of extreme, long-delay outliers. Finally, ticket pricing reflects a standard distribution for coach fares, averaging $\$377.65$ (median: $\$382.62$, SD: $\$68.08$), while first-class fares sit at a much higher premium, averaging $\$1457.09$ (median: $\$1505.78$, SD: $\$162.89$), with both pricing structures showing a slight left-skew.
+
+\vspace{2.5em}
+\newpage
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#Histogram
+library(ggplot2)
+ggplot(airline_rs,
+       aes(x = coach_price)) +
+  geom_histogram(
+    bins = 30,
+    fill = "steelblue",
+    color = "black"
+  ) +
+  labs(
+    title = "Distribution of Coach Price",
+    x = "Coach Price",
+    y = "Frequency"
+  )
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+
+  
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 2. VISUALIZATION
+# Histogram
+plt.figure()
+sns.histplot(df["coach_price"], bins=30, color="steelblue")
+plt.title("Distribution of Coach Price")
+plt.show()
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{Graph for Visualisation}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Histogram-Question 10.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+The histogram reveals that the variable coach\_price follows an approximately normal and symmetric distribution centered around a mean/median price of roughly 390 to 400. Ticket prices below 200 or above 500 are relatively rare. The steady rise and fall of the frequencies indicate stable, predictable pricing behavior without any prominent anomalous outliers.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#Boxplot
+library(ggplot2)
+ggplot(airline_rs,
+       aes(y = coach_price)) +
+  geom_boxplot(
+    fill = "turquoise3",
+    color = "black"
+  ) +
+  labs(
+    title = "Boxplot of Coach Price",
+    y = "Coach Price"
+  )
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# Boxplot
+plt.figure()
+sns.boxplot(y=df["coach_price"], color="turquoise")
+plt.title("Boxplot of Coach Price")
+plt.savefig("Box plot-Question 10",dpi=300,bbox_inches="tight")
+plt.show()
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Box plot-Question 10.png}
+\end{figure}
+\newpage
+\noindent \textbf{Interpretation :} \\
+The boxplot indicates that the median coach ticket price is approximately 380, with the central 50\% of prices ranging predictably between 330 and 430. While the overall pricing model shows high symmetry and mirrors a normal distribution pattern, the boxplot reveals clear low-price outliers below 180 and minor high-price outliers around 580, which were not as easily distinct in the previous histogram.
+
+\vspace{2.5em}
+
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#bar chart
+ggplot(airline_rs,
+       aes(x = day_of_week)) +
+  geom_bar(
+    fill = "coral",
+    color = "black"
+  ) +
+  labs(
+    title = "Flights by Day of Week",
+    x = "Day of Week",
+    y = "Count"
+  )
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# Bar chart (day_of_week)
+df["day_of_week"] = df["day_of_week"].astype("category").cat.codes
+
+plt.figure()
+sns.countplot(x="day_of_week", data=df, color="coral")
+plt.title("Flights by Day of Week")
+plt.savefig("Bar chart-Question 10",dpi=300,bbox_inches="tight")
+plt.show()
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bar chart-Question 10.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+The bar chart demonstrates a highly uneven distribution of flight frequencies across the week. Day 2 serves as the peak operational day with over 3100 flights, closely followed by Day 3. Conversely, Day 4 experiences the lowest traffic volume, dropping to approximately 800 flights. This visualization clearly shows that flight scheduling is heavily concentrated into a 3-day high-volume cluster (Days 0, 2, and 3), while the latter part of the indexed week (Days 4, 5, and 6) faces a significant reduction in total flight operations.
+\vspace{2.5em}
+
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#weekend vs weekday bar chart
+library(ggplot2)
+ggplot(airline_rs,
+       aes(x = factor(weekend),
+           fill = factor(weekend))) +
+  geom_bar() +
+  scale_fill_manual(
+    values = c("steelblue", "skyblue")
+  ) +
+  labs(
+    title = "Weekend vs Weekday Flights",
+    x = "Weekend",
+    y = "Count"
+  )
+
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# Weekend bar chart
+df["weekend"] = df["weekend"].astype("category").cat.codes
+
+plt.figure()
+sns.countplot(x="weekend", data=df)
+plt.title("Weekend vs Weekday Flights")
+plt.savefig("Weekend bar chart-Question 10",dpi=300,bbox_inches="tight")
+plt.show()
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+
+\noindent \textbf{Graph for Visualisation :}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Weekend bar chart-Question 10.png}
+\end{figure}
+
+\noindent \textbf{Interpretation :} \\
+The count plot demonstrates a highly significant, disproportionate distribution of flight schedules between weekdays and weekends. Even though a standard week consists of five weekdays and only two weekend days, weekend flights (Category 1) heavily dominate the dataset with approximately 8,000 operations, compared to just 4,300 flights during weekdays (Category 0). This visual proof confirms that airline flight density is intensely concentrated during weekends, which directly aligns with typical surges in consumer travel demand on non-working days.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#testing hypothesis
+#3-a.t-test(weekend affect on coach price)
+t.test(coach_price ~ weekend, data = airline_rs)
+
+\end{lstlisting}
+\end{codebox}
+\newpage
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+Welch Two Sample t-test
+
+data:  coach_price by weekend
+t = -82.52, df = 9018.8, p-value < 2.2e-16
+alternative hypothesis: true difference in means between group No and group Yes
+is not equal to 0
+95 percent confidence interval:
+ -85.91124 -81.92439
+sample estimates:
+ mean in group No mean in group Yes 
+         321.7316          405.6494
+
+\end{verbatim}
+
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#3-a. t-test (weekend effect)
+print(stats.ttest_ind(
+    df[df["weekend"]==1]["coach_price"],
+    df[df["weekend"]==0]["coach_price"],
+    nan_policy="omit"
+))
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+TtestResult(statistic=np.float64(80.98114487036905), 
+pvalue=np.float64(0.0), df=np.float64(12337.0))
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+An independent two-sample t-test was conducted to evaluate whether coach ticket prices differ significantly between weekend and weekday flights. The results indicate a highly significant difference, $t(12337) = 80.98$, $p < 0.001$. Therefore, we reject the null hypothesis at the 5% significance level and conclude that flight timing has a significant impact on pricing. Specifically, the strong positive t-statistic reveals that weekend flights are significantly more expensive on average than weekday flights, confirming a clear "weekend effect" on airline ticket pricing.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+3-b. Z-test
+install.packages("BSDA")
+library(BSDA)
+z.test(
+  airline_rs$coach_price,
+  mu = 100,
+  sigma.x = sd(airline_rs$coach_price))
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+One-sample z-Test
+
+data:  airline_rs$coach_price
+z = 455.16, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 100
+95 percent confidence interval:
+ 374.9574 377.3357
+sample estimates:
+mean of x 
+ 376.1465 
+
+\end{verbatim}
+
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#3-b. z-test (manual)
+z = (df["coach_price"].mean() - 100) / (df["coach_price"].std()/np.sqrt(len(df)))
+print("Z-score:", z)
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+Z-score: 452.53355749907325
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+A one-sample z-test was performed to evaluate whether the true average coach ticket price differs significantly from a baseline value of 100. The calculated test statistic shows an overwhelming deviation ($z = 452.53$, $p < 0.001$). Furthermore, the $95\%$ confidence interval for the true mean $[374.96, \,\, 377.34]$ does not capture the hypothesized value of 100. Therefore, we reject the null hypothesis at the 5% significance level. We conclude that the true mean coach ticket price is statistically significantly different from 100; specifically, the sample estimate ($\bar{x} = 376.15$) reveals that the actual average price is substantially higher than 100.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#3-c.chi-square test (weekend vs redeye)
+chisq.test(table(airline_rs$weekend, airline_rs$redeye))
+
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+Pearson's Chi-squared test with Yates'
+	continuity correction
+
+data:  table(airline_rs$weekend, airline_rs$redeye)
+X-squared = 4.8469, df = 1, p-value = 0.0277
+
+\end{verbatim}
+
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#3-c. chi-square test
+chi_table = pd.crosstab(df["weekend"], df["redeye"].astype("category").cat.codes)
+print(stats.chi2_contingency(chi_table))
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+Chi2ContingencyResult(statistic=np.float64(0.03532293017466096)
+, pvalue=np.float64(0.8509205856437194),
+dof=1, expected_freq=array([[4115.64259664,  210.35740336],
+       [7623.35740336,  389.64259664]]))
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+A Chi-square Test of Independence was performed to evaluate the relationship between the two categorical variables. The test yielded a calculated test statistic of $\chi^2(1) = 0.0353$ with an associated p-value of $0.8509$. Because the p-value is significantly greater than our chosen alpha level of $0.05$ ($\text{p-value} > 0.05$), we fail to reject the null hypothesis. We conclude that there is no statistically significant evidence of an association between the two variables; they are statistically independent of each other within the target dataset.
+\vspace{2.5em}
+
+\noindent \textbf{R Code:}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#4.Independent t-test
+t.test(coach_price ~ weekend, data = airline_rs)
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{R Output:}
+Welch Two Sample t-test
+
+data:  coach\_price by weekend
+t = -82.52, df = 9018.8, p-value < 2.2e-16
+alternative hypothesis: true difference in means between group No and group Yes is not equal to 0
+95 percent confidence interval:
+ -85.91124 -81.92439
+sample estimates:
+ mean in group No mean in group Yes 
+         321.7316          405.6494 
+\begin{verbatim}
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code:}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 4.independent t-test 
+print(stats.ttest_ind(
+    df[df["weekend"]==1]["coach_price"],
+    df[df["weekend"]==0]["coach_price"],
+    nan_policy="omit"
+))
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+
+\noindent \textbf{Python Output:}
+
+TtestResult(statistic=np.float64(80.98114487036905), pvalue=np.float64(0.0), df=np.float64(12337.0))
+\begin{verbatim}
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation:} \\
+An independent two-sample $t$-test was conducted to analyze the difference in average 
+coach ticket prices between weekday and weekend flights. The test results reveal a 
+highly significant difference, $t(12337) = 80.98$, $p < 0.001$. Consequently, the null 
+hypothesis is rejected at the 5\% significance level.
+
+Sample estimates show that weekend flights ($\bar{X}\_{\text{weekend}} = 405.65$) have a 
+higher average price than weekday flights ($\bar{X}]\_{\text{weekday}} = 321.73$), with a 
+mean price premium of approximately $83.92$ units. The 95\% confidence interval 
+$[-85.91, -81.92]$ further confirms that the true population mean difference is strictly 
+negative (when subtracting weekend from weekday), providing conclusive evidence of a 
+substantial "weekend markup" effect in ticket pricing.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#5.price difference (Weekend vs Weekday)
+aggregate(coach_price ~ weekend,
+          data = airline_rs,
+          mean)
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+
+weekend coach\_price
+
+1      No    321.7316
+
+
+2     Yes    405.6494
+
+\begin{verbatim}
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+#5. price difference
+print(df.groupby("weekend")["coach_price"].mean())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+weekend
+
+0    321.815175
+
+1    405.508781
+\begin{verbatim}
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+The data shows a clear and visible price difference between weekdays and weekends. Flying on weekends is significantly more expensive, costing about 83.92 units (or 26.08\%) more than regular weekdays. This happens because more people want to travel on weekends, which allows airlines to increase their prices.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#6.correlation analysis
+cor(airline_rs[, c("coach_price",
+                   "firstclass_price",
+                   "miles","hours",
+                   "passengers","delay")],
+    use = "complete.obs")
+
+\end{lstlisting}
+\end{codebox}
+\newpage
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+                coach_price firstclass_price
+coach_price       1.00000000     0.7600668653
+firstclass_price  0.76006687     1.0000000000
+miles             0.35641339     0.2971742030
+hours             0.35079839     0.2917760127
+passengers        0.15234118    -0.0021393799
+delay             0.01107994    -0.0004236668
+                       miles       hours   passengers
+coach_price      0.356413390 0.350798388  0.152341177
+firstclass_price 0.297174203 0.291776013 -0.002139380
+miles            1.000000000 0.985647891  0.006485869
+hours            0.985647891 1.000000000  0.008250699
+passengers       0.006485869 0.008250699  1.000000000
+delay            0.006879801 0.008433840  0.003971652
+                         delay
+coach_price       0.0110799446
+firstclass_price -0.0004236668
+miles             0.0068798006
+hours             0.0084338400
+passengers        0.0039716522
+delay             1.0000000000
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 6. CORRELATION
+print(df[["coach_price","firstclass_price","miles","hours","passengers","delay"]].corr())
+
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+
+                  coach\_price  firstclass\_price     miles     hours  \
+coach\_price          1.000000          0.755568  0.336359  0.329411   
+firstclass\_price     0.755568          1.000000  0.290992  0.285578   
+miles                0.336359          0.290992  1.000000  0.985743   
+hours                0.329411          0.285578  0.985743  1.000000   
+passengers           0.166545          0.024447 -0.003260 -0.002260   
+delay               -0.004101         -0.006792 -0.015459 -0.015826  
+
+
+
+                  passengers     delay  
+coach\_price         0.166545 -0.004101  
+firstclass\_price    0.024447 -0.006792  
+miles              -0.003260 -0.015459  
+hours              -0.002260 -0.015826  
+passengers          1.000000 -0.006930  
+delay              -0.006930  1.000000
+
+\begin{verbatim}
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+The correlation matrix reveals that the strongest linear relationship exists between flight distance (miles) and duration (hours) with an $r$ value of $0.9856$, followed closely by the pricing link between coach and first-class tickets ($r = 0.7601$). Flight distance and time maintain a moderate positive influence on ticket pricing. However, variables like total passengers and flight delays show correlation coefficients near zero, concluding that they do not hold any meaningful linear relationship with any other factors in this dataset.
+\vspace{2.5em}
+\newpage
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#7.Regression Analysis
+model1 <- lm(coach_price ~ inflight_meal +
+               inflight_entertainment +
+               inflight_wifi +
+               miles +
+               passengers,
+             data = airline_rs)
+
+summary(model1)
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+\begin{verbatim}
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-156.033  -39.331    7.313   38.976  142.455 
+
+Coefficients:
+                           Estimate Std. Error t value
+(Intercept)               2.792e+01  7.758e+00   3.599
+inflight_mealYes          2.034e+01  1.003e+00  20.283
+inflight_entertainmentYes 6.920e+01  1.149e+00  60.212
+inflight_wifiYes          7.018e+01  1.532e+00  45.819
+miles                     2.518e-02  4.855e-04  51.865
+passengers                8.320e-01  3.599e-02  23.121
+                          Pr(>|t|)    
+(Intercept)                0.00032 ***
+inflight_mealYes           < 2e-16 ***
+inflight_entertainmentYes  < 2e-16 ***
+inflight_wifiYes           < 2e-16 ***
+miles                      < 2e-16 ***
+passengers                 < 2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 50.83 on 12333 degrees of freedom
+Multiple R-squared:  0.4313,	Adjusted R-squared:  0.4311 
+F-statistic:  1871 on 5 and 12333 DF,  p-value: < 2.2e-16
+
+\end{verbatim}
+\vspace{0.5em}
+\newpage
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 7. REGRESSION ANALYSIS
+# Model 1
+cat_cols = ["inflight_meal","inflight_entertainment","inflight_wifi"]
+
+for col in cat_cols:
+    df[col] = df[col].astype("category").cat.codes
+
+X1 = df[cat_cols + ["miles","passengers"]]
+y1 = df["coach_price"]
+
+X1 = sm.add_constant(X1)
+model1 = sm.OLS(y1, X1).fit()
+
+print(model1.summary())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+ OLS Regression Results                            
+==============================================================================
+Dep. Variable:            coach_price   R-squared:                       0.431
+Model:                            OLS   Adj. R-squared:                  0.431
+Method:                 Least Squares   F-statistic:                     1872.
+Date:                Mon, 18 May 2026   Prob (F-statistic):               0.00
+Time:                        22:54:13   Log-Likelihood:                -66050.
+No. Observations:               12339   AIC:                         1.321e+05
+Df Residuals:                   12333   BIC:                         1.322e+05
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==========================================================================================
+                             coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------
+const                     17.9654      7.840      2.291      0.022       2.597      33.333
+inflight_meal             18.7852      1.001     18.775      0.000      16.824      20.746
+inflight_entertainment    71.6909      1.154     62.116      0.000      69.429      73.953
+inflight_wifi             68.4016      1.501     45.575      0.000      65.460      71.344
+miles                      0.0241      0.000     49.524      0.000       0.023       0.025
+passengers                 0.8926      0.037     24.455      0.000       0.821       0.964
+==============================================================================
+Omnibus:                      653.553   Durbin-Watson:                   1.997
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              381.432
+Skew:                          -0.287   Prob(JB):                     1.49e-83
+Kurtosis:                       2.358   Cond. No.                     3.80e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 3.8e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+\end{verbatim}
+\vspace{0.5em}
+
+\newpage
+\noindent \textbf{Interpretation :} \\
+The multiple linear regression model is highly significant ($F = 1872, p < 0.001$) and explains $43.1\%$ of the variance in coach ticket prices. Inflight entertainment holds the largest upward impact ($+71.69$), closely followed by the inclusion of inflight Wi-Fi ($+68.40$). Physical flight metrics like distance traveled (miles) and passenger volume also show small but highly statistically significant positive relationships with pricing structures. Managers should note the high condition number, which highlights minor multicollinearity concerns within the data structure.
+\vspace{2.5em}
+
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#8.linear regression(price prediction)
+model2 <- lm(firstclass_price ~ coach_price + miles + passengers,
+             data = airline_rs)
+
+summary(model2)
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+
+\begin{verbatim}
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-340.80  -72.33    5.19   73.07  372.31 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.063e+03  1.566e+01  67.875  < 2e-16 ***
+coach_price  1.864e+00  1.509e-02 123.515  < 2e-16 ***
+miles        4.076e-03  1.066e-03   3.823 0.000133 ***
+passengers  -1.534e+00  7.472e-02 -20.532  < 2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 104.2 on 12335 degrees of freedom
+Multiple R-squared:  0.5924,	Adjusted R-squared:  0.5923 
+F-statistic:  5976 on 3 and 12335 DF,  p-value: < 2.2e-16
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 8. PRICE PREDICTION MODEL
+X2 = df[["coach_price","miles","passengers"]]
+y2 = df["firstclass_price"]
+
+X2 = sm.add_constant(X2)
+model2 = sm.OLS(y2, X2).fit()
+
+print(model2.summary())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+ OLS Regression Results                            
+==============================================================================
+Dep. Variable:       firstclass_price   R-squared:                       0.583
+Model:                            OLS   Adj. R-squared:                  0.582
+Method:                 Least Squares   F-statistic:                     5737.
+Date:                Mon, 18 May 2026   Prob (F-statistic):               0.00
+Time:                        22:54:13   Log-Likelihood:                -74950.
+No. Observations:               12339   AIC:                         1.499e+05
+Df Residuals:                   12335   BIC:                         1.499e+05
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+===============================================================================
+                  coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const        1028.1734     15.896     64.680      0.000     997.014    1059.333
+coach_price     1.8265      0.015    121.204      0.000       1.797       1.856
+miles           0.0060      0.001      5.609      0.000       0.004       0.008
+passengers     -1.3181      0.076    -17.280      0.000      -1.468      -1.169
+==============================================================================
+Omnibus:                      149.262   Durbin-Watson:                   2.028
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              119.965
+Skew:                          -0.167   Prob(JB):                     8.91e-27
+Kurtosis:                       2.651   Cond. No.                     3.79e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 3.79e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+Optimization terminated successfully.
+         Current function value: 0.001872
+         Iterations 16
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+The multiple linear regression model is highly statistically significant ($F = 5737, p < 0.001$) and accounts for $58.3\%$ of the variance in first-class ticket prices. Economy coach pricing is the primary driver of first-class fares, exerting a strong positive impact ($+1.83$). While flight distance (miles) also adds a slight positive premium, passenger volume carries a significant negative effect ($-1.32$) on the final price profile. The high condition number flags minor multicollinearity concerns, suggesting a baseline correlation exists between the independent predictors.
+\vspace{2.5em}
+
+\newpage
+\noindent \textbf{R Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Rstyle]
+#9.Logistic Regression (Redeye prediction)
+table(airline_rs$redeye)
+airline_rs$redeye <- ifelse(
+  airline_rs$redeye == "Yes", 1,0)
+log_model <- glm(redeye ~ coach_price + miles + passengers + delay,
+                 data = airline_rs,
+                 family = binomial)
+
+summary(log_model)
+
+
+
+\end{lstlisting}
+\end{codebox}
+
+\vspace{0.5em}
+\noindent \textbf{R Output :}
+
+\begin{verbatim}
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  1.312e+02  1.996e+01   6.574 4.89e-11 ***
+coach_price -1.530e-02  7.505e-03  -2.039   0.0414 *  
+miles        3.087e-05  5.066e-04   0.061   0.9514    
+passengers  -6.903e-01  1.052e-01  -6.562 5.31e-11 ***
+delay        5.816e-03  5.468e-03   1.064   0.2875    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 4774.830  on 12338  degrees of freedom
+Residual deviance:   44.856  on 12334  degrees of freedom
+AIC: 54.856
+
+Number of Fisher Scoring iterations: 13
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Python Code :}
+\begin{codebox}
+\begin{lstlisting}[style=Pythonstyle]
+# 9. LOGISTIC REGRESSION (Redeye)
+df["redeye"] = df["redeye"].astype("category").cat.codes
+
+y3 = df["redeye"]
+X3 = df[["coach_price","miles","passengers","delay"]]
+
+X3 = sm.add_constant(X3)
+
+log_model = sm.Logit(y3, X3).fit()
+
+print(log_model.summary())
+\end{lstlisting}
+\end{codebox}
+\vspace{0.5em}
+\noindent \textbf{Python Output :}
+
+\begin{verbatim}
+ Logit Regression Results                           
+==============================================================================
+Dep. Variable:                 redeye   No. Observations:                12339
+Model:                          Logit   Df Residuals:                    12334
+Method:                           MLE   Df Model:                            4
+Date:                Mon, 18 May 2026   Pseudo R-squ.:                  0.9904
+Time:                        22:54:13   Log-Likelihood:                -23.102
+converged:                       True   LL-Null:                       -2399.3
+Covariance Type:            nonrobust   LLR p-value:                     0.000
+===============================================================================
+                  coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const         162.3413     30.619      5.302      0.000     102.330     222.353
+coach_price    -0.0278      0.008     -3.535      0.000      -0.043      -0.012
+miles          -0.0011      0.001     -2.069      0.039      -0.002   -5.54e-05
+passengers     -0.8263      0.154     -5.366      0.000      -1.128      -0.524
+delay           0.0031      0.007      0.420      0.674      -0.012       0.018
+===============================================================================
+
+Possibly complete quasi-separation: A fraction 0.97 of observations can be
+perfectly predicted. This might indicate that there is complete
+quasi-separation. In this case some parameters will not be identified.
+
+\end{verbatim}
+\vspace{0.5em}
+\noindent \textbf{Interpretation :} \\
+The logistic regression model is highly effective and statistically significant ($\text{Pseudo } R^2 = 0.9904, p < 0.001$), explaining nearly all variability in predicting overnight redeye flights. Passenger volume stands out as a massive negative driver ($-0.8263$), showing that redeye flights are distinctly less crowded. Lower coach ticket prices also significantly increase the likelihood of a flight being classified as a redeye, reflecting real-world budget pricing structures for late-night travel. Flight delays, however, hold no statistical relevance ($p = 0.674$) within the classification model.
+\vspace{2.5em}
+\end{document}
